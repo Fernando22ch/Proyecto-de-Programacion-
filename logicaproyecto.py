@@ -32,7 +32,7 @@ def registrar_estudiante():
     nuevo_estudiante['Nombre'] = input("Nombre: ")
     nuevo_estudiante['Carrera'] = input("Carrera: ")
     nuevo_estudiante['cursos_matriculados']=[]
-
+    nuevo_estudiante['actividades']=[]
     print("Autenticacion")
     usuario = input("\tNombre de usuario: ")
     contraseña = cifrar(obtener_clave("Digite su contraseña: "))
@@ -237,6 +237,11 @@ def calendario():
                                 domingo.append(curso['inicia'])
                                 domingo.append(curso['finaliza'])
                                 break
+    
+    
+    
+    
+    
     limpiar_terminal()
     #aqui va registrar actividades que modifica las listas ya creadas que tambien tienen cursos
     print("Lunes:")
