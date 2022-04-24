@@ -1,3 +1,4 @@
+from sre_constants import JUMP
 from time import sleep
 import logicaproyecto as logica
 
@@ -92,6 +93,7 @@ def menu_interfaz():
 
 def menu_prin_estudiante():
     while True: 
+        JUMP
         logica.limpiar_terminal()
         print("1) Cambio de carrera")
         print("2) Matricular cursos")
@@ -128,7 +130,7 @@ def menu_prin_estudiante():
                 # Agregar actividades
             case 4:
                 logica.calendario()
-                sleep(5)
+                
             case 5:
                 break
             case _:
