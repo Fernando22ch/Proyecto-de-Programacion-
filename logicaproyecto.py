@@ -4,8 +4,9 @@ from time import sleep
 from hashlib import md5
 from getpass import getpass
 import datetime as dt
-from xmlrpc.server import SimpleXMLRPCDispatcher
-usuario_momentaneo=''
+
+
+usuario_momentaneo=''    #usuario momentaneo para tener toda la informacion del estudiante que inicio sesion
 
 
 
@@ -13,20 +14,25 @@ usuario_momentaneo=''
 
 def limpiar_terminal():
     print (chr(27) + "[2J")
-def cifrar (entrada):
+def cifrar (entrada):                               # funcion para convertir la contraseña en una cifrada
     entrada_binaria=entrada.encode('ascii')
     resultado = md5(entrada_binaria)
     return (resultado.hexdigest())
 
-def obtener_clave(mensaje):
+def obtener_clave(mensaje):          #funcion que privatiza la contraseña al escribirla
     pswd = getpass(mensaje+": ")
     return (pswd)
 
-usuarios_estudiante=[{'Nombre':'Jeison Blanco Rojas', 'Carrera':'computacion', 'autenticacion':{'usuario':'jeisonb1','contraseña':'3e47c3e9bf25d1058ad95b4d9f5d0281'},
-'cursos_matriculados':[{'nombre':'taller de programacion','estado': ''}, {'nombre':'introduccion a la programacion','estado': ''}], 'actividades':{'futbol':{'dia':'lunes','horas':'4'}}}]
+usuarios_estudiante=[{'Nombre':'Jeison Blanco Rojas', 'Carrera':'computacion',      #listado de estudiantes registrados
+'autenticacion':{'usuario':'jeisonb1','contraseña':'3e47c3e9bf25d1058ad95b4d9f5d0281'},
+'cursos_matriculados':[{'nombre':'taller de programacion','estado': ''}, {'nombre':'introduccion a la programacion','estado': ''}], 
+'actividades':[{'nombre':'Repaso de syntaxis de programacion','curso':'taller de programacion','dia':'jueves','h_inicio':dt.time(17,00,00),'h_final':dt.time(20,00,00),'estado':''}]}]
 
-usuarios_admin=[{'Nombre':'Fernando Chaves Calvo', 'telefono':'83220200', 'autenticacion':{'usuario':'admin','contraseña':'21232f297a57a5a743894a0e4a801fc3'}}]
-def registrar_estudiante():
+usuarios_admin=[{'Nombre':'Fernando Chaves Calvo', 'telefono':'83220200',  #listado de administradores registrados
+'autenticacion':{'usuario':'admin','contraseña':'21232f297a57a5a743894a0e4a801fc3'}}]
+
+
+def registrar_estudiante():       #obtiene los datos del estudiante para despues agregarlo
     limpiar_terminal()
     nuevo_estudiante = dict()
     nuevo_estudiante['Nombre'] = input("Nombre: ")
@@ -41,7 +47,7 @@ def registrar_estudiante():
 
 
 
-def registrar_admin():
+def registrar_admin():        #obtiene los datos del administrador para despues agregarlo
 
     limpiar_terminal()
     nuevo_admin=dict()
@@ -57,7 +63,7 @@ def registrar_admin():
     usuarios_admin.append(nuevo_admin)
 
 
-def validar_estudiante(usuario,contraseña):
+def validar_estudiante(usuario,contraseña):     #funcion que verifica si las entradas del inicio de sesion del estudiante, existen.
     global usuario_momentaneo
     resp=False
     contraseña=cifrar(contraseña)
@@ -69,7 +75,7 @@ def validar_estudiante(usuario,contraseña):
             break
     return(resp)
 
-def validar_admin(usuario,contraseña):
+def validar_admin(usuario,contraseña):      #funcion que verifica si las entradas del inicio de sesion del administrador, existen.
     resp=False
     contraseña=cifrar(contraseña)
     for value in usuarios_admin:
@@ -81,15 +87,15 @@ def validar_admin(usuario,contraseña):
 
 
     
-
-cursos=[{'nombre': 'taller de programacion','creditos':'3','horas totales de dedicacion': 9,'horas lectivas':'3','inicia': dt.time(8,00,00),'finaliza':dt.time(11,00,00),'dia de clases':'martes','carreras':'computacion'},
-{'nombre':'introduccion a la programacion','creditos':'3','horas totales de dedicacion': 9,'horas lectivas':'3','inicia': dt.time(8,00,00),'finaliza':dt.time(11,00,00),'dia de clases':'lunes','carreras':'computacion'}]
+# listado de cursos disponibles con sus respectivos datos
+cursos=[{'nombre': 'taller de programacion','creditos':'3','horas totales de dedicacion': 9,'horas lectivas':'3','inicia': dt.time(8,00,),'finaliza':dt.time(11,00,),'dia de clases':'martes','carreras':'computacion'},
+{'nombre':'introduccion a la programacion','creditos':'3','horas totales de dedicacion': 9,'horas lectivas':'3','inicia': dt.time(8,00,),'finaliza':dt.time(11,00,),'dia de clases':'lunes','carreras':'computacion'}]
 
 # funciones para los administradores
-def registros_de_cursos():
+def registros_de_cursos():   #registra los datos dados por el administrador para crear y agregar un curso
     curso_nuevo=dict()
     
-    curso_nuevo['nombre']=c=input("Nombre del curso: ")
+    curso_nuevo['nombre']=input("Nombre del curso: ")
     
     curso_nuevo['creditos']=int(input("creditos: "))
     curso_nuevo['horas lectivas']=int(input("horas lectivas: "))
@@ -99,32 +105,29 @@ def registros_de_cursos():
     curso_nuevo['finaliza']=dt.time(int(hora_f),0,0)
     curso_nuevo['dia de clases']=input("dia del curso: ")
     curso_nuevo['horas totales de dedicacion']=input("horas totales de dedicacion: ")
-    curso_nuevo['carreras']=carre=input("carreras que pertenece el curso: ")
+    curso_nuevo['carreras']=input("carreras que pertenece el curso: ")
     cursos.append(curso_nuevo)
 
-    # for carrera in carerras_cursos:
-    #     if carrera['nombre']==carre:
-    #          carerras_cursos['cursos_esp']=list
-    #          carerras_cursos['cursos_esp']+=c
+    
    
 carerras_cursos=[{'nombre':'computacion','cursos_esp':['taller de programacion','introduccion a la programacion']}]
-carreras={'computacion','agronomia'}
+carreras={'computacion','agronomia'} #listado de carreras disponibles
 
-def registros_de_carreras():
+def registros_de_carreras():    #registra los datos dados por el administrador para crear y agregar una carrera
     limpiar_terminal()
     print("Carreras existentes:")   
     print(carreras)
     carre_nueva=(input("Nombre de la carrera: "))
     carreras.add(carre_nueva)
 
-   # carerras_cursos.append['nombre']=(carre_nueva)
+
 
 
 
 
 # funciones para los estudiantes 
 
-def cambiar_carrera():
+def cambiar_carrera():    #el estudiante, puede cambiar su carrera, asi mismo los cursos matriculados 
     global usuario_momentaneo
     limpiar_terminal()
     carreranueva= input("nueva carrera:" )
@@ -135,7 +138,7 @@ def cambiar_carrera():
             x['cursos matriculados']=[]
             
 
-def matricular_cursos():
+def matricular_cursos():     #el estudiante, puede matricular cursos que previamente se agreguen
     limpiar_terminal()
     global usuario_momentaneo
     print("Cursos disponibles")
@@ -163,7 +166,7 @@ def matricular_cursos():
         print("Curso invalido")
 
 
-def aprobar_reprobar_cursos():
+def aprobar_reprobar_cursos():    #el estudiante, puede cambiar el estado de un curso, dejandolo invalido si es aprobado o reprobado
     limpiar_terminal()
     global usuario_momentaneo
     for x in usuarios_estudiante:
@@ -174,16 +177,60 @@ def aprobar_reprobar_cursos():
             for curso_matri in x['cursos_matriculados']:
                 if curso_matri['nombre']==curso_modificar:
                     curso_matri['estado']=input("Curso aprobado o reprobado:")
-            # for curso in cursos:
-            #     if curso['carreras'] == x['Carrera'] and x['cursos_matriculados'] == curso_modificar:
-            #         x['cursos_matriculados'][curso_modificar]['estado']= estado = input("Curso aprobado o reprobado:")
+         
                 else:
                     print("Curso Incorrecto o no matriculado")
 
+def menu_registro_de_actividades():     #menu para que el estudiante registre las actividades que quiera
+    limpiar_terminal()
+    global usuario_momentaneo   
+    nueva_actividad={}
+    nueva_actividad['estado']='' 
+
+    nueva_actividad ['nombre']=input('Cual es el nombre de la actividad:')
+    nueva_actividad ['curso']=input('si pertenece a algun curso escribalo,si no dejelo en blanco:')
+    nueva_actividad ['dia']=input('Que dia es la actividad:')
+    hora_inicio=(input("Hora de inicio: "))
+    nueva_actividad ['h_inicio']=dt.time(int(hora_inicio),0)
+    hora_final=(input("Hora de finalizacion: "))
+    nueva_actividad ['h_final']=dt.time(int(hora_final),0)
+    for curso in usuario_momentaneo ['cursos_matriculados']:
+        if curso['nombre']==nueva_actividad['curso']:
+            if curso['estado']=='': 
+                  insertar_actividad(nueva_actividad,usuario_momentaneo['actividades'])
+            else:
+                print("error: curso ya aprobado o reprobado")
+        else:
+            print("error: actividad no relacionada a ningun curso matriculado")
+            
+            
+        
 
 
-#erroresd
-def calendario():
+    
+def choque_horario (fi1,ff1,fi2,ff2):       #revisa 2 fechas de inicio y 2 finales para retornar su existe un choque
+    return ((fi2>=fi1 and fi2<=ff1)or(ff2>=fi1 and ff2<=ff1))
+
+def insertar_actividad (nueva_actividad,actividad): #comprueba si una actividad a registrar no choca con alguna ya registrada
+    choque=False
+    if len(usuario_momentaneo['actividades'])>0:
+        for actividad in usuario_momentaneo['actividades']:
+            if actividad['estado']=='':
+                if actividad['dia']==nueva_actividad['dia']:
+                
+                 if choque_horario(fi1=actividad['h_inicio'],ff1=actividad['h_final'],fi2=nueva_actividad['h_inicio'],ff2=nueva_actividad['h_final']):
+                    choque=True
+                    break
+        if not choque: 
+            usuario_momentaneo['actividades'].append(nueva_actividad)
+            print ("se agrego la actividad")
+        else:
+            print ("No se agrega por choque de horarios")
+    else:
+        return (choque)
+
+
+def calendario(): #impresion de todos los datos guardado en sus respectivos horarios.
 
     lunes=[]
     martes=[]
@@ -208,7 +255,7 @@ def calendario():
                                 lunes.append(curso['finaliza'])
                                 break
                             elif dia=='martes':
-                                martes.append(curso['nombre'])
+                                martes.append(curso['nombre'])    
                                 martes.append(curso['inicia'])
                                 martes.append(curso['finaliza'])
                                 break
@@ -237,43 +284,75 @@ def calendario():
                                 domingo.append(curso['inicia'])
                                 domingo.append(curso['finaliza'])
                                 break
-    
-    
-    
-    
-    
+            actividades_pen=x['actividades']
+            for y in actividades_pen:
+                if y['estado']=='':
+                    dia=y['dia']
+                    if dia=='lunes':
+                        lunes.append(y['nombre'])
+                        lunes.append(y['curso'])
+                        lunes.append(y['h_inicio'])
+                        lunes.append(y['h_final'])
+                        break
+                    elif dia=='martes':
+                        martes.append(y['nombre'])
+                        martes.append(y['curso'])    
+                        martes.append(y['h_inicio'])
+                        martes.append(y['h_final'])
+                        break
+                    elif dia=='miercoles':
+                        miercoles.append(y['nombre'])
+                        miercoles.append(y['curso'])
+                        miercoles.append(y['h_inicio'])
+                        miercoles.append(y['h_final'])
+                        break
+                    elif dia=='jueves':
+                        jueves.append(y['nombre'])
+                        jueves.append(y['curso'])
+                        jueves.append(y['h_inicio'])
+                        jueves.append(y['h_final'])
+                        break
+                    elif dia=='viernes':
+                        viernes.append(y['nombre'])
+                        viernes.append(y['curso'])
+                        viernes.append(y['h_inicio'])
+                        viernes.append(y['h_final'])
+                        break
+                    elif dia=='sabado':
+                        sabado.append(y['nombre'])
+                        sabado.append(y['curso'])
+                        sabado.append(y['h_inicio'])
+                        sabado.append(y['h_final'])
+                        break
+                    elif dia=='domingo':
+                        domingo.append(y['nombre'])
+                        domingo.append(y['curso'])
+                        domingo.append(y['h_inicio'])
+                        domingo.append(y['h_final'])
+                        break
     limpiar_terminal()
-    #aqui va registrar actividades que modifica las listas ya creadas que tambien tienen cursos
     print("Lunes:")
-    print(lunes)
+    for e in lunes:
+        print(e)
     print("Martes:")
-    print(martes)
+    for e in martes:
+        print(e)
     print("Miercoles:")
-    print(miercoles)
+    for e in miercoles:
+        print(e)
     print("Jueves:")
-    print(jueves)
+    for e in jueves:
+        print(e)
     print("Viernes:")
-    print(viernes)
+    for e in viernes:
+        print(e)
     print("Sabado:")
-    print(sabado)
+    for e in sabado:
+        print(e)
     print("Domingo:")
-    print(domingo)
+    for e in domingo:
+        print(e)
     opptt=input("Envie 1 tecla para regresar al menu:")        
     if opptt==1:
-        JUMP 
-
-                       
-
-
-
-
-
-
-
-        
-
-
-
-
-# '''             prueba de funciones 
-# '''
+        JUMP
+    
